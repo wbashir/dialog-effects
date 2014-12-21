@@ -1,7 +1,7 @@
 Package.describe({
   name: 'bixin:dialogs',
   summary: 'Meteor Codrops Dialog-Effects',
-  version: '1.0.0',
+  version: '1.0.2',
   git: 'https://github.com/warsamebashir/dialog-effects.git'
 });
 
@@ -14,10 +14,8 @@ Package.onUse(function(api) {
     'modernizr.custom.js',
     'classie.js',
     'dialogFx.js',
-    'snap.svg-min.js',
+    'snap.svg-min.js'
   ], ['client']);
-
-  api.export(['DialogFx']);
 
 });
 
