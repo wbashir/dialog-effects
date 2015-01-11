@@ -41,7 +41,7 @@
 	}
 
 	function DialogFx( el, options ) {
-		this.el = el;
+		this.el = jQuery && el.length ? el[0] : el;
 		this.options = extend( {}, this.options );
 		extend( this.options, options );
 		this.ctrlClose = this.el.querySelector( '[data-dialog-close]' );

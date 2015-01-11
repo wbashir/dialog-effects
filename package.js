@@ -1,7 +1,7 @@
 Package.describe({
   name: 'bixin:dialogs',
   summary: 'Meteor Codrops Dialog-Effects',
-  version: '1.0.2',
+  version: '1.0.3',
   git: 'https://github.com/warsamebashir/dialog-effects.git'
 });
 
