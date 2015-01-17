@@ -45,7 +45,6 @@
 		this.options = extend( {}, this.options );
 		extend( this.options, options );
 		this.ctrlClose = this.el.querySelector( '[data-dialog-close]' );
-		this.isOpen = false;
 		this._initEvents();
 	}
 
@@ -59,39 +58,55 @@
 		var self = this;
 
 		// close action
-		this.ctrlClose.addEventListener( 'click', this.toggle.bind(this) );
+		this.ctrlClose.addEventListener( 'click', this.close.bind(this) );
 
 		// esc key closes dialog
 		document.addEventListener( 'keydown', function( ev ) {
 			var keyCode = ev.keyCode || ev.which;
-			if( keyCode === 27 && self.isOpen ) {
-				self.toggle();
+			if( keyCode === 27 && self.isOpen() ) {
+				self.close();
 			}
 		} );
 
-		this.el.querySelector( '.dialog__overlay' ).addEventListener( 'click', this.toggle.bind(this) );
+		this.el.querySelector( '.dialog__overlay' ).addEventListener( 'click', this.close.bind(this) );
 	}
+
+	DialogFx.prototype.isOpen = function() {
+		return this.el.hasAttribute("dialog--open");
+	};
+
+	DialogFx.prototype.open = function() {
+		if(!this.isOpen()) {
+			classie.add(this.el, 'dialog--open');
+
+			// callback on open
+			this.options.onOpenDialog(this);
+		}
+	};
+
+	DialogFx.prototype.close = function() {
+		var self = this;
+		if(!this.isOpen()) {
+			classie.remove(this.el, 'dialog--open');
+			classie.add(this.el, 'dialog--close');
+
+			onEndAnimation(this.el.querySelector('.dialog__content'), function () {
+				classie.remove(self.el, 'dialog--close');
+			});
+
+			// callback on close
+			this.options.onCloseDialog(this);
+		}
+	};
 
 	DialogFx.prototype.toggle = function() {
 		var self = this;
-		if( this.isOpen ) {
-			classie.remove( this.el, 'dialog--open' );
-			classie.add( self.el, 'dialog--close' );
-			
-			onEndAnimation( this.el.querySelector( '.dialog__content' ), function() {
-				classie.remove( self.el, 'dialog--close' );
-			} );
-
-			// callback on close
-			this.options.onCloseDialog( this );
+		if( this.isOpen() ) {
+			this.close();
 		}
 		else {
-			classie.add( this.el, 'dialog--open' );
-
-			// callback on open
-			this.options.onOpenDialog( this );
+			this.open();
 		}
-		this.isOpen = !this.isOpen;
 	};
 
 	// add to global namespace
